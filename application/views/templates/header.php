@@ -28,8 +28,8 @@
 	    <div class="collapse navbar-collapse" id="barra-collapse">
 	      <ul class="nav navbar-nav">
 	        <!-- <li class="active"> -->
-	        <li><a href="<?php echo base_url()?>index.php/Archivos">Archivos</a></li>
-	        <li><a href="<?php echo base_url()?>index.php/Archivos/Agregar">Nuevo</a></li>
+	        <li><a href="<?php echo base_url()?>Archivos">Archivos</a></li>
+	        <li><a href="<?php echo base_url()?>Archivos/Agregar">Nuevo</a></li>
 	      </ul>
 	    </div><!-- /.navbar-collapse -->
 	  </div><!-- /.container-fluid -->
