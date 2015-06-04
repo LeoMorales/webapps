@@ -592,7 +592,12 @@ class CI_Image_lib {
 		$file_ext = $xp['ext'];
 
 		$this->full_src_path = $this->source_folder.$this->source_image;
+		/*
+		se modifico la construccion del full_dst_path para que la ruta destino la pueda construir desde el models
+
 		$this->full_dst_path = $this->dest_folder.$filename.$this->thumb_marker.$file_ext;
+		*/
+		$this->full_dst_path = $filename.$this->thumb_marker.$file_ext;
 
 		/* Should we maintain image proportions?
 		 *
