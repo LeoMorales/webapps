@@ -7,6 +7,7 @@
 		
 		public function index(){
 			$this->load->model('archivo_model');
+			$this->load->helper('html');
 			$data['titulo'] = "Pagina principal";
 			$data['imagenes'] = $this->archivo_model->recuperarImagenes();
 			$this->load->view("templates/header", $data);
@@ -17,7 +18,7 @@
 		public function Agregar(){
 			if($this->input->post()){
 				$this->load->model('archivo_model');
-				$data['respuesta'] = $this->imagen_model->insertarImagen();
+				$data['respuesta'] = $this->archivo_model->insertarImagen();
 			}
 			$data['titulo'] = "Nuevo archivo";
 			$this->load->view("templates/header", $data);
