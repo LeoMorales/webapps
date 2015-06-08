@@ -67,7 +67,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">                                
                         <div class="row-fluid user-row">
-                            <img src="http://s11.postimg.org/7kzgji28v/logo_sm_2_mr_1.png" class="img-responsive" alt="Conxole Admin"/>
+                            <img src="<?php echo base_url(); ?>static/images/camera_logo.png" class="img-responsive" width="150px" heigth="150px" alt="Conxole Admin"/>
                         </div>
                     </div>
 
