@@ -13,15 +13,19 @@ if (isset($respuesta))
 		<div class="form-group">
 	    	<label for="nombre">Nombre:</label>
 	    	<input type="text" placeholder="Bosque" class="form-control" name="nombre">
-	  	</div><br>
+	  	</div>
 	  	<div class="form-group">
 	    	<label for="desc">Descripción:</label>
 	    	<textarea name="desc" class="form-control" rows="4"></textarea>
-	  	</div><br>
+	  	</div>
 	  	<div class="form-group">
-	  		<label for="arch">Seleccione imagen</label><br>
+	  		<label for="imagen">Seleccione imagen</label><br>
 	  		<input  id="arch" name="imagen" type="file">
-	  	</div><br>
+	  	</div>
+	  	<div class="form-group">
+	    	<label for="tags">Tags:</label>
+	    	<textarea name="tags" class="form-control" rows="2"></textarea>
+	  	</div>
 	  	<div class="checkbox form-group">
 	    	<label><input name="public" type="checkbox"> Publico</label>
 	  	</div><br>
