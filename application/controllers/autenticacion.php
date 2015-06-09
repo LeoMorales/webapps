@@ -40,15 +40,22 @@
 				$firephp->log(curl_error($handler));
 			curl_close($handler);  
 			
-			if ($user = $this->give_me_the_user($response)){
-				$data['email'] = $user;
-				$data['nombre'] = $nombre;
+			$respuesta = json_decode($response);
+			$firephp->log($respuesta);
+			if ($respuesta->email_verified) {
+				//Existe en la BAse?
+				// return $this->user_del_modelo($respuesta->email);
+				$user = $this->give_me_the_user($respuesta->email, $nombre, $token);
+			
+				$data['email'] = $user["correo"];
+				$data['nombre'] = $user["username"];
 				// echo "<center><h4>Hola ".$nombre."! (".$email.") </h4></center>";
 				$this->load->view("autenticacion/bienvenido", $data);
 			}
+			
 		}
 
-		private function give_me_the_user($un_json){
+		private function give_me_the_user($un_email, $un_username, $un_token){
 			// {
 			//  "issuer": "accounts.google.com",
 			//  "issued_to": "247475190591-e59sg0qhf5j10udhp805nt3lsmoucu10.apps.googleusercontent.com",
@@ -59,29 +66,19 @@
 			//  "email": "leo.moralesr23@gmail.com",
 			//  "email_verified": true
 			// }
-			require_once('FirePHPCore/FirePHP.class.php');
-			$firephp = FirePHP::getInstance(true);
-			require_once('FirePHPCore/fb.php');
-			$firephp->setEnabled(true);  // or FB::
-	 
-			$firephp->log("DECODIFICANDO:");
-			$firephp->log($un_json);
-			$respuesta = json_decode($un_json);
-			$firephp->log("DECODIFICADO:");
-			$firephp->log($respuesta);
-			if ($respuesta->email_verified) {
-				//Existe en la BAse?
-				return $this->user_del_modelo($respuesta->email);
-			}
-
-		}
-
-		private function user_del_modelo($un_email){
 			//PRECONDICION: un_email es un email valido de google.
 			//Fijarse en el modelo si está en la Base, si no existe lo crea.
-			$user = $un_email;
+			//RETORNA: un user = ["correo"->correo, "username"->username, "token"->token]
+			$this->load->model('UsuarioModel');
+		    $user = $this->UsuarioModel->give_me_the_user_with($un_email);
+		    			
+		    if (! $user){
+		    	$user = $this->UsuarioModel->create_user($un_email, $un_username, $un_token);
+		    }
 			return $user;
+			
 		}
+
 
 		
 	}
