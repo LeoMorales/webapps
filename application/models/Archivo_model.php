@@ -42,6 +42,16 @@ class Archivo_model extends CI_Model{
 			return 0;
 	}
 
+	private function incrementarReferencias($id){
+		$this->db->select('*');
+		$this->db->where('id',$id);
+		$g = $this->db->get('tag');
+		$referencias = $g->result()[0]->referencias;
+		$data['referencias'] = $referencias + 1;
+		$this->db->where('id', $id);
+		$this->db->update('tag', $data);
+	}
+
 	private function insertarTags($id_imagen){
 		$cadena  = preg_replace( "([ ]+)","-",$_POST['tags']);
 		$split = explode("-", $cadena);
@@ -52,9 +62,11 @@ class Archivo_model extends CI_Model{
 				$data['id_tag'] = $id_tag;
 				$data['id_imagen'] = $id_imagen;
 				$this->db->insert('tag_imagen', $data);
+				$this->incrementarReferencias($id_tag);
 			}
 			else{
 				$data['nombre'] = $token;
+				$data['referencias'] = 1;
 				$this->db->insert('tag', $data);
 				$data_img['id_tag'] = $this->tagExiste($token);
 				$data_img['id_imagen'] = $id_imagen;
