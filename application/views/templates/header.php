@@ -5,6 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="<?php echo base_url(); ?>static/js/jquery-2.1.4.min.js"></script>
+    <!-- include the Google Platform Library on your web pages that integrate Google Sign-In. -->
+	<script src="https://apis.google.com/js/platform.js" async defer></script>
+
+	<!-- Specify the client ID you created for your app in the Google Developers Console with the google-signin-client_id meta element. -->
+	<meta name="google-signin-client_id" content="247475190591-e59sg0qhf5j10udhp805nt3lsmoucu10.apps.googleusercontent.com">
+
+
 	<title>
 		<?php echo $titulo; ?> | Web
 	</title>
@@ -29,8 +36,10 @@
 	    <div class="collapse navbar-collapse" id="barra-collapse">
 	      <ul class="nav navbar-nav">
 	        <!-- <li class="active"> -->
+	        <?php if(isset($_SESSION["user_token"])){?>
 	        <li><a href="<?php echo base_url()?>Archivos">Archivos</a></li>
 	        <li><a href="<?php echo base_url()?>Archivos/Agregar">Nuevo</a></li>
+	        <?php }?> <!-- isset($_SESION["user_token"]){ -->
 	      </ul>
 	    </div><!-- /.navbar-collapse -->
 	  </div><!-- /.container-fluid -->

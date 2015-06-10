@@ -6,17 +6,13 @@
  * @package PARALLAX LOGIN.
 
 -->
-<!-- include the Google Platform Library on your web pages that integrate Google Sign-In. -->
-<script src="https://apis.google.com/js/platform.js" async defer></script>
-
-<!-- Specify the client ID you created for your app in the Google Developers Console with the google-signin-client_id meta element. -->
-<meta name="google-signin-client_id" content="247475190591-e59sg0qhf5j10udhp805nt3lsmoucu10.apps.googleusercontent.com">
-
 <script src="http://mymaplist.com/js/vendor/TweenLite.min.js"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>static/css/styles_home.css"> 
+<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Tangerine">
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script type="text/javascript">
-    
+
     function onSignIn(googleUser) {
         var profile = googleUser.getBasicProfile();
         console.log('ID: ' + profile.getId());
@@ -59,21 +55,25 @@
     // https://www.googleapis.com/oauth2/v1/tokeninfo?id_token=XYZ123
 
 </script>
-<center><h1>Home!</h1></center>
-<body>
+<center><h1 class="titulo-ppal">Galeria Fenix</h1></center>
+<!-- <body> -->
     <div class="container">
         <div class="row vertical-offset-100">
-            <div class="col-md-4 col-md-offset-4">
+            <div class="col-md-4 col-md-offset-8">
                 <div class="panel panel-default">
-                    <div class="panel-heading">                                
+                    <!-- <div class="panel-heading panel-loggin"> -->                                
+                    <div class="panel-loggin">
                         <div class="row-fluid user-row">
                             <img src="<?php echo base_url(); ?>static/images/camera_logo.png" class="img-responsive" width="150px" heigth="150px" alt="Conxole Admin"/>
                         </div>
                     </div>
 
                     <div class="panel-body">
-                        <div class="g-signin2" data-onsuccess="onSignIn"></div>
-                        <a href="#" onclick="signOut();">Sign out</a>
+                        <?php if(!isset($_SESSION["user_token"])){?>
+                            <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                        <?php }else {?>
+                            <a href="#" onclick="signOut();">Sign out</a>
+                        <?php }?>
                         <script>
                           function signOut() {
                             var auth2 = gapi.auth2.getAuthInstance();

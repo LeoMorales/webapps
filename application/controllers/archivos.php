@@ -6,6 +6,7 @@
 	class Archivos extends CI_Controller{
 		
 		public function index(){
+			session_start();//xq en las vistas se utiliza $?SESSIONS
 			$this->load->model('archivo_model');
 			$this->load->helper('html');
 			$data['titulo'] = "Pagina principal";
@@ -16,6 +17,7 @@
 		}
 
 		public function Agregar(){
+			session_start();//xq en las vistas se utiliza $?SESSIONS
 			if($this->input->post()){
 				$this->load->model('archivo_model');
 				$data['respuesta'] = $this->archivo_model->insertarImagen();

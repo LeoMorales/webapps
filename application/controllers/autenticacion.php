@@ -21,6 +21,8 @@
 
 			$url_google = "https://www.googleapis.com/oauth2/v1/tokeninfo?id_token=";
 
+
+// 04i1httfgq3nj2ebg8v5sgabt3
 			//Preguntamos a Google si es valido con curl
 			// Get cURL resource
 			$url = $url_google.$token;
@@ -49,6 +51,14 @@
 			
 				$data['email'] = $user["correo"];
 				$data['nombre'] = $user["username"];
+
+				$this->load->library( 'nativesession' );		
+		        //Read the username from session
+		        // $username = $this->nativesession->get( 'username' );
+		        //Update shopping cart session data
+		        $this->nativesession->set( 'user_token', $token );
+		        $firephp->log("SESSION:");
+		        $firephp->log($this->nativesession->get('user_token'));
 				// echo "<center><h4>Hola ".$nombre."! (".$email.") </h4></center>";
 				$this->load->view("autenticacion/bienvenido", $data);
 			}
