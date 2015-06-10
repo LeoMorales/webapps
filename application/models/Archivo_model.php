@@ -46,6 +46,7 @@ class Archivo_model extends CI_Model{
 		$cadena  = preg_replace( "([ ]+)","-",$_POST['tags']);
 		$split = explode("-", $cadena);
 		foreach ($split as $token) {
+			$data = [];
 			$id_tag = $this->tagExiste($token);
 			if ($id_tag > 0){
 				$data['id_tag'] = $id_tag;
@@ -69,8 +70,7 @@ class Archivo_model extends CI_Model{
 	}
 
 	public function insertarImagen(){
-    	/*
-		do {
+    	do {
 			$this->nombre = $this->random_nombre($_POST['nombre'], 7);
     	} while ($this->nombreExiste($this->nombre) != 0);
 		$this->descripcion = $_POST['desc'] ;
@@ -124,9 +124,8 @@ class Archivo_model extends CI_Model{
 		$CI->image_lib->clear();
 
     	$this->db->insert('imagen',$this);
-    	*/
-    	$this->insertarTags(41);
-    	//return $status;
+    	$this->insertarTags($this->nombreExiste($this->nombre));
+    	return $status;
 	}
 }
 ?>
