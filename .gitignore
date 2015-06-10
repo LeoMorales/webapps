@@ -1,2 +1,4 @@
 # Ignore database configuration:
 application/config/database.php
+imageStorage/*
+imageThumbnails/*
