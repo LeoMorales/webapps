@@ -49,6 +49,7 @@
         .done(function( msg ) {
             // alert( "Data Saved: " + msg );
             $("#hello").html(msg);
+            $(".g-signin2").html("<a href=\"<?php echo base_url(); ?>\" onclick=\"signOut();\">Sign out</a>")
         });
 
     }
@@ -72,15 +73,32 @@
                         <?php if(!isset($_SESSION["user_token"])){?>
                             <div class="g-signin2" data-onsuccess="onSignIn"></div>
                         <?php }else {?>
-                            <a href="#" onclick="signOut();">Sign out</a>
+                            <a href="<?php echo base_url(); ?>" onclick="signOut();">Sign out</a>
                         <?php }?>
+                        <script src="<?php echo base_url(); ?>assets/js/jquery-cookie/src/jquery.cookie.js"></script>
+                        
                         <script>
-                          function signOut() {
-                            var auth2 = gapi.auth2.getAuthInstance();
-                            auth2.signOut().then(function () {
-                              console.log('User signed out.');
-                            });
-                          }
+                            function signOut() {
+                                // var auth2 = gapi.auth2.getAuthInstance();
+                                // auth2.signOut().then(function () {
+                                //     console.log('User signed out.');
+                                // });
+                            // };
+                                // if ($.removeCookie('PHPSESSID')){ // => true
+                                //    console.log('cookie eliminada!'); 
+                                // } 
+                                // if ($.removeCookie("G_ENABLED_IDPS")){ // => true
+                                //    console.log('cookie eliminada!'); 
+                                // } 
+                                if ($.removeCookie('G_ENABLED_IDPS', { path: '/' })){ // => true
+                                   console.log('cookie eliminada!'); 
+                                }
+                                if ($.removeCookie('PHPSESSID', { path: '/' })){ // => true
+                                   console.log('cookie eliminada!'); 
+                                } 
+                                
+                                
+                            }
                         </script>
 
 

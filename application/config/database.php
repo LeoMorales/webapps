@@ -65,13 +65,8 @@ $query_builder = TRUE;
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
-<<<<<<< HEAD
-	'username' => 'root',
-	'password' => '',
-=======
 	'username' => 'leomorales',
 	'password' => 'leomorales',
->>>>>>> 7455032d1b497b1e6fa1068591d6bae4cab9bc6e
 	'database' => 'manejador_archivos_multimedia',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
