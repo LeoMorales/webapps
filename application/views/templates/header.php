@@ -8,6 +8,13 @@
     <script>
     	__base_url = "<?php echo base_url(); ?>";
     </script>
+    <!-- include the Google Platform Library on your web pages that integrate Google Sign-In. -->
+	<script src="https://apis.google.com/js/platform.js" async defer></script>
+
+	<!-- Specify the client ID you created for your app in the Google Developers Console with the google-signin-client_id meta element. -->
+	<meta name="google-signin-client_id" content="247475190591-e59sg0qhf5j10udhp805nt3lsmoucu10.apps.googleusercontent.com">
+
+
 	<title>
 		<?php echo $titulo; ?> | Web
 	</title>
@@ -30,10 +37,12 @@
 
 	    <!-- Collect the nav links, forms, and other content for toggling -->
 	    <div class="collapse navbar-collapse" id="barra-collapse">
-	      <ul class="nav navbar-nav">
+	      <ul id="super_nav_bar" class="nav navbar-nav">
 	        <!-- <li class="active"> -->
+	        <?php if(isset($_SESSION["user_token"])){?>
 	        <li><a href="<?php echo base_url()?>Archivos">Archivos</a></li>
 	        <li><a href="<?php echo base_url()?>Archivos/Agregar">Nuevo</a></li>
+	        <?php }?> <!-- isset($_SESION["user_token"]){ -->
 	      </ul>
 	    </div><!-- /.navbar-collapse -->
 	  </div><!-- /.container-fluid -->

@@ -9,7 +9,13 @@
 		public
 		function index()
 		{
-			$data['titulo'] = "Gestor de Archivos Multimedia";
+			session_start();
+			if (!isset($_SESSION['user_token'])){
+				$data['titulo'] = "Session OFF";
+			}
+			else{
+				$data['titulo'] = "Session ON";
+			}
 			$this->load->view("templates/header", $data);
 			$this->load->view("home/index");
 			$this->load->view("templates/footer");
