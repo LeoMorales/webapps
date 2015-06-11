@@ -48,8 +48,20 @@
         })
         .done(function( msg ) {
             // alert( "Data Saved: " + msg );
-            $("#hello").html(msg);
+            // $("#hello").html(msg);
+            var url_archivo = "<?php echo base_url()?>Archivos";
+            var url_nuevo = "<?php echo base_url()?>Archivos/Agregar";
+            console.log("URLs: "+url_archivo+" "+url_nuevo);
+            $("#super_nav_bar").append("<li><a href="+url_archivo+">Archivos</a></li>");
+            $("#super_nav_bar").append("<li><a href="+url_nuevo+">Nuevo</a></li>");
+            var el_nombre = "<a aria-expanded=\"false\" role=\"button\" data-toggle=\"dropdown\" class=\"dropdown-toggle\" href=\"#\">Aca va el Nombre... <span class=\"caret\"></span></a>";
+            var otro = "<div class=\"nav navbar-nav navbar-right\"> NOMBRE </div>";
+            var otro2 = "<ul class=\"nav navbar-nav navbar-right\"><li class=\"navbar-brand active\">"+profile.getName()+"</li></ul>";
+            console.log(msg);
+
+            $("#barra-collapse").append(otro2);
             $(".g-signin2").html("<a href=\"<?php echo base_url(); ?>\" onclick=\"signOut();\">Sign out</a>")
+
         });
 
     }

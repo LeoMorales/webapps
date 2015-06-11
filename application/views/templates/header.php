@@ -34,7 +34,7 @@
 
 	    <!-- Collect the nav links, forms, and other content for toggling -->
 	    <div class="collapse navbar-collapse" id="barra-collapse">
-	      <ul class="nav navbar-nav">
+	      <ul id="super_nav_bar" class="nav navbar-nav">
 	        <!-- <li class="active"> -->
 	        <?php if(isset($_SESSION["user_token"])){?>
 	        <li><a href="<?php echo base_url()?>Archivos">Archivos</a></li>
