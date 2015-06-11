@@ -75,12 +75,6 @@ class Archivo_model extends CI_Model{
 		}
 	}
 
-	public function recuperarImagenes(){
-		$this->db->select('thumbnail');
-		$g = $this->db->get('imagen');
-		return $g->result_array();
-	}
-
 	public function insertarImagen(){
     	do {
 			$this->nombre = $this->random_nombre($_POST['nombre'], 7);
