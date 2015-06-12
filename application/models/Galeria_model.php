@@ -9,6 +9,22 @@ class Galeria_model extends CI_model{
 
 	public function recuperarImagenes(){
 		$this->db->select('thumbnail');
+		$this->db->where('propietario !=', $_SESSION['user_correo']);
+		$g = $this->db->get('imagen');
+		return $g->result_array();
+	}
+
+	public function recuperarImagenesPublicas(){
+		$this->db->select('thumbnail');
+		$this->db->where('publico', 1);
+
+		$g = $this->db->get('imagen');
+		return $g->result_array();
+	}
+
+	public function recuperarImagenesPropias(){
+		$this->db->select('thumbnail');
+		$this->db->where('propietario', $_SESSION['user_correo']);
 		$g = $this->db->get('imagen');
 		return $g->result_array();
 	}

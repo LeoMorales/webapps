@@ -1,10 +1,10 @@
 $(document).ready(function() {
-	var template = '<div class="col-md-3">' +
+	$("#form").submit(function() {
+		var template = '<div class="col-md-3">' +
 		'<a href="#" class="thumbnail">' +
 		'<img src="${src}">' +
 		'</a>' +
 		'</div>';
-	$("#form").submit(function() {
 		$.ajax({
 			url: __base_url + 'Archivos/',
 			type: 'POST',
@@ -22,4 +22,18 @@ $(document).ready(function() {
 		});
 		return false;
 	});
+
 });
+
+function removeImagen(path){
+	if (confirm("Desea eliminar la imagen?")) {
+  		$.ajax({
+			url: __base_url + 'Archivos/EliminarImagen',
+			type: 'POST',
+			dataType: 'json',
+			data: {path: path},
+			success:function(res){
+            }
+		});
+    }
+}

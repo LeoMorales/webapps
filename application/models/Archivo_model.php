@@ -85,7 +85,9 @@ class Archivo_model extends CI_Model{
 			$this->publico = 1;
 		date_default_timezone_set("America/Argentina/Buenos_Aires");
 		$this->fecha =  date('Y-m-d H:i:s', time());
-		$this->propietario = 1;
+		if (isset($_SESSION['user_correo'])){
+			$this->propietario = $_SESSION['user_correo'];
+		}
 		
 		//creacion de la imagen
 		$extension = image_type_to_extension(exif_imagetype($_FILES['imagen']['tmp_name']));
@@ -132,6 +134,27 @@ class Archivo_model extends CI_Model{
     	$this->db->insert('imagen',$this);
     	$this->insertarTags($this->nombreExiste($this->nombre));
     	return $status;
+	}
+
+	public function buscarThumbnail($correo, $thumb){
+		$this->db->select('*');
+		$this->db->where('thumbnail', $thumb);
+		$this->db->where('propietario', $correo);
+		$g = $this->db->get('imagen');
+		if ($g->num_rows() > 0)
+			return $g->result()[0]->id;
+		else
+			return 0;		
+	}
+
+	public function eliminarImagen(){
+		$id = $this->buscarThumbnail($_SESSION['user_correo'], $_POST['path']);
+		if ($id >0)
+			$this->db->where('id_imagen', $id);
+			$this->db->delete('tag_imagen');
+			$this->db->where('id', $id);
+			$this->db->delete('imagen');
+		return $id;
 	}
 }
 ?>

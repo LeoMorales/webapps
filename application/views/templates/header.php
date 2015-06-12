@@ -19,7 +19,7 @@
 		<?php echo $titulo; ?> | Web
 	</title>
     <!-- Bootstrap -->	
-	<link href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet">
+	<link href="<?php echo base_url('assets/css/bootstrap.min.css'); ?>" rel="stylesheet">
 </head>
 <body>
 	<nav class="navbar navbar-inverse">
@@ -39,8 +39,9 @@
 	    <div class="collapse navbar-collapse" id="barra-collapse">
 	      <ul id="super_nav_bar" class="nav navbar-nav">
 	        <!-- <li class="active"> -->
-	        <?php if(isset($_SESSION["user_token"])){?>
 	        <li><a href="<?php echo base_url()?>Archivos">Archivos</a></li>
+	        <?php if(isset($_SESSION["user_correo"])){?>
+	        <li><a href="<?php echo base_url()?>Archivos/Propias">Propias</a></li>
 	        <li><a href="<?php echo base_url()?>Archivos/Agregar">Nuevo</a></li>
 	        <?php }?> <!-- isset($_SESION["user_token"]){ -->
 	      </ul>

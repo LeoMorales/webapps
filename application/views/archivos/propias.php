@@ -18,9 +18,13 @@
 		<?php
 		foreach ($imagenes as $imagen){?>
 			<div class="col-md-3">
-				<a href="#" class="thumbnail">
-				<?= img($imagen['thumbnail']); ?>
-				</a>
+				<div class="thumbnail">
+					<a href="#">
+					<?= img($imagen['thumbnail']); ?>
+					</a>
+					<button type="button" class="btn btn-default glyphicon glyphicon-remove-circle"
+					onclick="removeImagen('<?=$imagen["thumbnail"]?>')"></button>
+				</div>
 			</div>
 		<?php } ?>
 		</center>	

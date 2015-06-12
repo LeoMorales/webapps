@@ -57,6 +57,7 @@
 		        // $username = $this->nativesession->get( 'username' );
 		        //Update shopping cart session data
 		        $this->nativesession->set( 'user_token', $token );
+		        $_SESSION['user_correo'] = $user['correo'];
 		        $firephp->log("SESSION:");
 		        $firephp->log($this->nativesession->get('user_token'));
 				// echo "<center><h4>Hola ".$nombre."! (".$email.") </h4></center>";
