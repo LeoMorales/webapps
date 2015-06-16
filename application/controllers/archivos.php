@@ -37,7 +37,7 @@
 			        	$data['result'] = [];
 			        }else{
 			        	$this->load->model('galeria_model');
-						$data['result'] = $this->galeria_model->filtrarImagenes();
+						$data['result'] = $this->galeria_model->filtrarImagenesPublicas();
 					}	
 					echo json_encode($data);
 				}else{
@@ -89,7 +89,7 @@
 			        	$data['result'] = [];
 			        }else{
 			        	$this->load->model('galeria_model');
-						$data['result'] = $this->galeria_model->filtrarImagenes();
+						$data['result'] = $this->galeria_model->filtrarImagenesPropias();
 					}	
 					echo json_encode($data);
 				}else{

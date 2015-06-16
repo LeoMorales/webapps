@@ -147,13 +147,32 @@ class Archivo_model extends CI_Model{
 			return 0;		
 	}
 
+	public function decrementarReferencias($imagen){
+		$this->db->select('*');
+		$this->db->from("tag");
+		$this->db->join("tag_imagen ti", "tag.id = ti.id_tag");
+		$this->db->where('id_imagen',$imagen);
+		$g = $this->db->get();
+		if ($g->num_rows() > 0){
+			$ref = $g->result()[0]->referencias;
+			$tag = $g->result()[0]->id_tag;
+			if ($ref > 0){
+				$data['referencias'] = $ref - 1;
+               	$this->db->where('id', $tag);
+				$this->db->update('tag', $data); 
+			}
+		}
+	}
+
 	public function eliminarImagen(){
 		$id = $this->buscarThumbnail($_SESSION['user_correo'], $_POST['path']);
-		if ($id >0)
+		if ($id >0){
+			$this->decrementarReferencias($id);
 			$this->db->where('id_imagen', $id);
 			$this->db->delete('tag_imagen');
 			$this->db->where('id', $id);
 			$this->db->delete('imagen');
+		}
 		return $id;
 	}
 }

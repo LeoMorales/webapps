@@ -4,7 +4,7 @@
 <center>
 	<h1> Pagina Principal </h1>
 	<br><br>
-	<form id="form">
+	<form id="form-propias">
 		<div class="input-group">
 	      <span class="input-group-btn">
 	        <button class="btn btn-default" type="submit">Buscar</button>
@@ -16,14 +16,15 @@
 	<div id="divthumbnails" class="row">
 		<center>
 		<?php
-		foreach ($imagenes as $imagen){?>
-			<div class="col-md-3">
+		$i = 0;
+		foreach ($imagenes as $imagen){$i++;?>
+			<div id="<?=$i?>" class="col-md-3">
 				<div class="thumbnail">
 					<a href="#">
 					<?= img($imagen['thumbnail']); ?>
 					</a>
 					<button type="button" class="btn btn-default glyphicon glyphicon-remove-circle"
-					onclick="removeImagen('<?=$imagen["thumbnail"]?>')"></button>
+					onclick="removeImagen('<?=$imagen["thumbnail"]?>',<?=$i?>)"></button>
 				</div>
 			</div>
 		<?php } ?>

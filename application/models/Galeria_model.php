@@ -2,7 +2,6 @@
 class Galeria_model extends CI_model{
 
 	//TODO contemplar tags con espacios
-	//TODO tags key sensitive
 	public function __construct(){
 		$this->load->database();
 	}
@@ -43,9 +42,46 @@ class Galeria_model extends CI_model{
 		$id_tag = $this->tagExiste($tag);
 		$arreglo = [];
 		if ($id_tag > 0){
-			$this->db->select('id_imagen');
+			$this->db->select('*');
+			$this->db->from("imagen img");
+			$this->db->join("tag_imagen ti", "img.id = ti.id_imagen");
 			$this->db->where('id_tag',$id_tag);
-			$g = $this->db->get('tag_imagen');
+			$this->db->where('propietario !=', $_SESSION['user_correo']);
+			$g = $this->db->get();
+			foreach ($g->result() as $row){
+				array_push($arreglo, $row->id_imagen);
+			}
+		}
+		return $arreglo;
+	}
+
+	public function recuperarImagenPublicaTag($tag){
+		$id_tag = $this->tagExiste($tag);
+		$arreglo = [];
+		if ($id_tag > 0){
+			$this->db->select('*');
+			$this->db->from("imagen img");
+			$this->db->join("tag_imagen ti", "img.id = ti.id_imagen");
+			$this->db->where('id_tag',$id_tag);
+			$this->db->where('publico', 1);
+			$g = $this->db->get();
+			foreach ($g->result() as $row){
+				array_push($arreglo, $row->id_imagen);
+			}
+		}
+		return $arreglo;
+	}
+
+	public function recuperarImagenPropiaTag($tag){
+		$id_tag = $this->tagExiste($tag);
+		$arreglo = [];
+		if ($id_tag > 0){
+			$this->db->select('*');
+			$this->db->from("imagen img");
+			$this->db->join("tag_imagen ti", "img.id = ti.id_imagen");
+			$this->db->where('id_tag',$id_tag);
+			$this->db->where('propietario =', $_SESSION['user_correo']);
+			$g = $this->db->get();
 			foreach ($g->result() as $row){
 				array_push($arreglo, $row->id_imagen);
 			}
@@ -69,6 +105,25 @@ class Galeria_model extends CI_model{
 		$imagenes = [];
 		foreach ($tags as $tag) {
 			$imagenes = $imagenes + $this->recuperarImagenTag($tag);
+		}
+		return $this->devolverImagenes($imagenes);
+	}
+
+
+	public function filtrarImagenesPublicas(){
+		$tags = explode(" ", $_POST['tags']);
+		$imagenes = [];
+		foreach ($tags as $tag) {
+			$imagenes = $imagenes + $this->recuperarImagenPublicaTag($tag);
+		}
+		return $this->devolverImagenes($imagenes);
+	}
+
+	public function filtrarImagenesPropias(){
+		$tags = explode(" ", $_POST['tags']);
+		$imagenes = [];
+		foreach ($tags as $tag) {
+			$imagenes = $imagenes + $this->recuperarImagenPropiaTag($tag);
 		}
 		return $this->devolverImagenes($imagenes);
 	}
