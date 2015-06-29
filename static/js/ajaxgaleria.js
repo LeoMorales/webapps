@@ -1,41 +1,58 @@
 $(document).ready(function() {
-	$("#form").submit(function() {
-		$url = __base_url + 'Archivos/';
-		$data = $('#form').serialize();
-		enviarFiltro($url, $data);
-		return false;
-	});
-
-	$("#form-propias").submit(function() {
-		$url = __base_url + 'Archivos/Propias';
-		$data = $('#form-propias').serialize();
-		enviarFiltro($url, $data);
-		return false;
-	});
-});
-
-function enviarFiltro(url, tags){
-	var template = '<div class="col-md-3">' +
-	'<a href="#" class="thumbnail">' +
+	$template = '<div class="col-md-3">' +
+	'<a href="#" class="thumbnail" data-toggle="modal" data-title="${nombre}" ' +
+	'data-image="${archivo}">' +
 	'<img src="${src}">' +
 	'</a>' +
 	'</div>';
+
+	$templatepropias = '<div class="miDiv row" id=${id}> <div class="mi-imagen col-md-4">' +
+	'<img src="${src}"> </div> <div class="mi-datos-imagen col-md-8">' +
+	'<label>Nombre: ${nombre}</label><br> <label>Descripción: ${descripcion}' +
+	'</label><br><label>Publico: ${publico}</label><br><label>Tags: ${tags}' +
+	'</label><br><button type="button" class="btn btn-primary"' +
+	'onclick="removeImagen()">Modificar</button><button type="button" class="btn btn-primary"' +
+	'onclick="removeImagen(${id})">Eliminar</button></div></div>';
+	
+	$("#buscar").on('keyup', function(e) {
+		e.preventDefault(); // previene comportamiento por defecto del form en evento submit
+		$url = __base_url + $(e.target).data('url');
+		$data = {"tags" :$(e.target).val()};
+		if ($(e.target).val().length == 0)
+			location.reload();
+		else{
+			if ($("#buscar")[0].getAttribute("template") !== null)	
+				enviarFiltroPropias($url, $data, $templatepropias, true);
+			else
+				enviarFiltro($url, $data, $template, true);
+		}
+
+	});
+
+	$("#buscar")[0].focus();
+});
+
+function enviarFiltro(url, tags, template, live){
 	$.ajax({
 		url: url,
 		type: 'POST',
 		data: tags,
 		success:function(respuesta){
 			var obj = JSON.parse(respuesta);
-            if (obj.result.length == 0){
-            	alert("No se encontraron coincidencias de tags");
-            	$("#buscar").val("");
+            if (live && obj.result.length == 0){
+            	$("#buscar")[0].style.color="red"; //ocurre cuando no hay conincidencias de tags
             }
             else{
+            	$("#buscar")[0].style.color="green";	
 				$("#divthumbnails").children().remove();
-            	$("#buscar").val("");
-                for (i = 0; i < obj.result.length; i++) { 
+            	for (i = 0; i < obj.result.length; i++) { 
                     var src = __base_url + obj.result[i].thumbnail;
-                    var markup = template.replace(/\$\{src\}/i, src)
+                    var nombre = obj.result[i].nombre;
+                    var archivo = __base_url + obj.result[i].archivo;
+                    var markup = template.replace(/\$\{src\}/i, src);
+                    markup = markup.replace(/\$\{nombre\}/i, nombre);
+                    markup = markup.replace(/\$\{archivo\}/i, archivo);
+                    markup = markup.replace(/\$\{id\}/i, i+1);
                     $('#divthumbnails').append($(markup));
                 }
             }
@@ -43,17 +60,50 @@ function enviarFiltro(url, tags){
 	});
 }
 
-function removeImagen(path, id){
+function enviarFiltroPropias(url, criterio, template, live){
+	$.ajax({
+		url: url,
+		type: 'POST',
+		data: criterio,
+		success:function(respuesta){
+			var obj = JSON.parse(respuesta);
+            if (live && obj.result.length == 0){
+            	$("#buscar")[0].style.color="red"; //ocurre cuando no hay conincidencias de tags
+            }
+            else{
+            	$("#buscar")[0].style.color="green";	
+				$("#contenido").children().remove()
+            	for (i = 0; i < obj.result.length; i++) { 
+                    var src = __base_url + obj.result[i].thumbnail;
+                    var nombre = obj.result[i].nombre;
+                    var descripcion = obj.result[i].descripcion;
+                    var publico = obj.result[i].publico;
+                    var tags = obj.result[i].tags;
+                    var id = obj.result[i].id;
+                    var markup = template.replace(/\$\{src\}/i, src);
+                    markup = markup.replace(/\$\{nombre\}/i, nombre);
+                    markup = markup.replace(/\$\{descripcion\}/i, descripcion);
+                    markup = markup.replace(/\$\{id\}/i, id);
+                    markup = markup.replace(/\$\{publico\}/i, (publico==1)?'Si':'No');
+                    markup = markup.replace(/\$\{tags\}/i, tags);
+                    $('#contenido').append($(markup));
+                }
+            }
+        }
+	});
+}
+
+function removeImagen(id){
+	console.log(id);
 	if (confirm("Desea eliminar la imagen?")) {
 		$.ajax({
 			url: __base_url + 'Archivos/EliminarImagen',
 			type: 'POST',
-			dataType: 'json',
-			data: {path: path},
-			success:function(res){
-				$("#"+id).remove();
-				alert("Imagen eliminada");
-            }
-		});
+			data: {id: id},
+			 success:function(res){
+			 	$("#"+id).remove();
+			 	alert("Imagen eliminada");
+             }
+		 });
     }
 }

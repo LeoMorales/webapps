@@ -12,7 +12,7 @@ if (isset($respuesta))
  	<form method="post" enctype="multipart/form-data">
 		<div class="form-group">
 	    	<label for="nombre">Nombre:</label>
-	    	<input type="text" placeholder="Bosque" class="form-control" name="nombre">
+	    	<input type="text" class="form-control" name="nombre">
 	  	</div>
 	  	<div class="form-group">
 	    	<label for="desc">Descripción:</label>

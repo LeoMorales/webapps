@@ -49,10 +49,10 @@
         .done(function( msg ) {
             // alert( "Data Saved: " + msg );
             // $("#hello").html(msg);
-            var url_archivo = "<?php echo base_url()?>Archivos";
+            var url_archivo = "<?php echo base_url()?>Archivos/Propias";
             var url_nuevo = "<?php echo base_url()?>Archivos/Agregar";
             console.log("URLs: "+url_archivo+" "+url_nuevo);
-            $("#super_nav_bar").append("<li><a href="+url_archivo+">Archivos</a></li>");
+            $("#super_nav_bar").append("<li><a href="+url_archivo+">Propias</a></li>");
             $("#super_nav_bar").append("<li><a href="+url_nuevo+">Nuevo</a></li>");
             var el_nombre = "<a aria-expanded=\"false\" role=\"button\" data-toggle=\"dropdown\" class=\"dropdown-toggle\" href=\"#\">Aca va el Nombre... <span class=\"caret\"></span></a>";
             var otro = "<div class=\"nav navbar-nav navbar-right\"> NOMBRE </div>";

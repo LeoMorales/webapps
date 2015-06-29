@@ -10,3 +10,41 @@
 .input-group{
 	width: 30%;
 }
+
+#buscar{
+	width: 60%;
+	font-weight: bold;
+}
+
+.miDiv{
+	border: 1px solid #ccc;
+	border-radius: 10px;
+	width: 70%;
+}
+
+a.thumbnail-propias{
+	margin-bottom: 0px;
+}
+
+::-webkit-input-placeholder {
+ font-size: 14px;
+ color: #d0cdfa;
+ text-transform: uppercase;
+ text-transform: uppercase;
+ text-align: center;
+ font-weight: bold;
+}
+:-moz-placeholder { /* older Firefox*/
+ font-size:14px;
+ color: #d0cdfa;
+ text-transform: uppercase;
+ text-align: center;
+ font-weight: bold;
+}
+::-moz-placeholder { /* Firefox 19+ */ 
+ font-size: 14px;
+ color: #d0cdfa; 
+ text-transform: uppercase;
+ text-align: center;
+ font-weight: bold;
+} 
