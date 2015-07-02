@@ -23,9 +23,9 @@ class Galeria_model extends CI_model{
 	}
 
 	public function recuperarImagenesPropias(){
-		$this->db->select('id, nombre, descripcion, publico, thumbnail');
+		$this->db->select('id, nombre, descripcion, publico, thumbnail, fecha');
 		$this->db->where('propietario', $_SESSION['user_correo']);
-		//$this->db->limit(12);
+		$this->db->limit(12);
 		$g = $this->db->get('imagen');
 		return $g->result_array();
 	}
@@ -41,7 +41,6 @@ class Galeria_model extends CI_model{
 	}
 
 	private function tagExiste($tag){
-		//$this->db->query("SELECT * FROM tag WHERE tag.nombre LIKE '%$tag%'");
 		$this->db->select('*');
 		$this->db->like(array('nombre' => $tag));
 		$g = $this->db->get('tag');

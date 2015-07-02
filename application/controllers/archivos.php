@@ -77,6 +77,29 @@
 			$this->load->view("templates/footer");
 		}
 
+		public function Modificar(){
+			session_start();
+			if (!isset($_SESSION['user_correo']))
+				redirect('Archivos');
+			if($this->input->post()){
+				require 'FirePHPCore/fb.php';
+				$this->load->model('archivo_model');
+				$data['respuesta'] = $this->archivo_model->modificarImagen();
+				//FB::log($data);
+				redirect('Archivos/Propias');
+			}else{
+				$this->load->model('archivo_model');
+				$resultado = $this->archivo_model->recuperarImagen($_GET['imagen']);
+				if ($resultado == null)
+					redirect('Archivos/Propias');
+				$data['datosImagen'] = $resultado;
+				$data['titulo'] = "Modificación archivo";
+				$this->load->view("templates/header", $data);
+				$this->load->view("archivos/modificar", $data);
+				$this->load->view("templates/footer");
+			}
+		}
+
 		public function Propias(){
 			session_start();
 			if (!isset($_SESSION['user_correo'])){
@@ -113,7 +136,9 @@
 			session_start();
 			if (isset($_SESSION['user_correo'])){
 				$this->load->model('archivo_model');
-				echo $this->archivo_model->eliminarImagen();
+				$this->archivo_model->eliminarImagen();
+				//require 'FirePHPCore/fb.php';
+				//FB::log($result);
 			}
 		}
 

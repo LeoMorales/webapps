@@ -1,4 +1,4 @@
-#form-agregar{
+.form-personalizado{
 	width: 40%;
 	margin: 0 auto;
 }
@@ -20,6 +20,10 @@
 	border: 1px solid #ccc;
 	border-radius: 10px;
 	width: 70%;
+}
+
+.mi-imagen>img{
+	padding: 10px;
 }
 
 a.thumbnail-propias{

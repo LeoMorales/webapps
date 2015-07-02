@@ -8,7 +8,7 @@ if (isset($respuesta))
 	echo $respuesta;
 ?>
 <center><h1>Agregar imagen</h1></center>
-<div id="form-agregar">
+<div class="form-personalizado">
  	<form method="post" enctype="multipart/form-data">
 		<div class="form-group">
 	    	<label for="nombre">Nombre:</label>

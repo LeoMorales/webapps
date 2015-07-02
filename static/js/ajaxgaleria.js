@@ -6,12 +6,13 @@ $(document).ready(function() {
 	'</a>' +
 	'</div>';
 
-	$templatepropias = '<div class="miDiv row" id=${id}> <div class="mi-imagen col-md-4">' +
+	$templatepropias = '<div class="miDiv row" data-nombre="${nombre}" data-descripcion="${descripcion}"'+
+	'data-fecha="${fecha}" id=${id}> <div class="mi-imagen col-md-4">' +
 	'<img src="${src}"> </div> <div class="mi-datos-imagen col-md-8">' +
 	'<label>Nombre: ${nombre}</label><br> <label>Descripción: ${descripcion}' +
-	'</label><br><label>Publico: ${publico}</label><br><label>Tags: ${tags}' +
-	'</label><br><button type="button" class="btn btn-primary"' +
-	'onclick="removeImagen()">Modificar</button><button type="button" class="btn btn-primary"' +
+	'</label><br><label>Tags: ${tags}</label><br><label>Fecha: ${fecha}</label><br>' +
+	'<label>Publico: ${publico}</label><br><a href="modificar?imagen=${id}"'+
+	'class="btn btn-primary">Modificar</a> <button type="button" class="btn btn-primary"' +
 	'onclick="removeImagen(${id})">Eliminar</button></div></div>';
 	
 	$("#buscar").on('keyup', function(e) {
@@ -80,12 +81,14 @@ function enviarFiltroPropias(url, criterio, template, live){
                     var publico = obj.result[i].publico;
                     var tags = obj.result[i].tags;
                     var id = obj.result[i].id;
+                    var fecha = obj.result[i].fecha;
                     var markup = template.replace(/\$\{src\}/i, src);
-                    markup = markup.replace(/\$\{nombre\}/i, nombre);
-                    markup = markup.replace(/\$\{descripcion\}/i, descripcion);
-                    markup = markup.replace(/\$\{id\}/i, id);
+                    markup = markup.replace(/\$\{nombre\}/g, nombre);
+                    markup = markup.replace(/\$\{descripcion\}/g, descripcion);
+                    markup = markup.replace(/\$\{id\}/g, id);
                     markup = markup.replace(/\$\{publico\}/i, (publico==1)?'Si':'No');
                     markup = markup.replace(/\$\{tags\}/i, tags);
+                    markup = markup.replace(/\$\{fecha\}/g, fecha);
                     $('#contenido').append($(markup));
                 }
             }

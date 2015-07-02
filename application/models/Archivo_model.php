@@ -144,10 +144,7 @@ class Archivo_model extends CI_Model{
 		$this->db->where('id', $id);
 		$this->db->where('propietario', $correo);
 		$g = $this->db->get('imagen');
-		if ($g->num_rows() > 0)
-			return TRUE;
-		else
-			return FALSE;		
+		return $g;
 	}
 
 	public function decrementarReferencias($imagen){
@@ -156,9 +153,9 @@ class Archivo_model extends CI_Model{
 		$this->db->join("tag_imagen ti", "tag.id = ti.id_tag");
 		$this->db->where('id_imagen',$imagen);
 		$g = $this->db->get();
-		if ($g->num_rows() > 0){
-			$ref = $g->result()[0]->referencias;
-			$tag = $g->result()[0]->id_tag;
+		foreach ($g->result() as $row){
+			$ref = $row->referencias;
+			$tag = $row->id_tag;
 			if ($ref > 0){
 				$data['referencias'] = $ref - 1;
                	$this->db->where('id', $tag);
@@ -169,7 +166,9 @@ class Archivo_model extends CI_Model{
 
 	public function eliminarImagen(){
 		$existe = $this->buscarThumbnail($_SESSION['user_correo'], $_POST['id']);
-		if ($existe){
+		if ($existe->num_rows() > 0){
+			unlink($existe->result()[0]->archivo);
+			unlink($existe->result()[0]->thumbnail);
 			$this->decrementarReferencias($_POST['id']);
 			$this->db->where('id_imagen', $_POST['id']);
 			$this->db->delete('tag_imagen');
@@ -177,6 +176,24 @@ class Archivo_model extends CI_Model{
 			$this->db->delete('imagen');
 		}
 		return;
+	}
+
+	public function recuperarImagen($id){
+		$this->db->select("*");
+		$this->db->where("id", $id);
+		$result = $this->db->get("imagen");
+		if ($result->num_rows() > 0)
+			return $result->result()[0];
+		else
+			return null;
+	}
+
+	public function modificarImagen(){
+		$data['nombre'] = $_POST['nombre'];
+		$data['descripcion'] = $_POST['desc'];
+		$data['publico'] = isset($_POST['public'])?1:0;
+		$this->db->where("id", $_GET['imagen']);
+		$this->db->update('imagen', $data); 
 	}
 }
 ?>
