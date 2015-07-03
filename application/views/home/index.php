@@ -23,20 +23,6 @@
         // window.location.href = "<?php echo base_url(); ?>"+"Autenticacion/hello/hola";
         // $.post('/Autenticacion',{"token" : "holis"}
         url_autenticacion = "<?php echo base_url(); ?>"+"Autenticacion/hello";
-        // $.ajax({  
-        //     //controller path
-        //     url: url_autenticacion,  
-        //     type: "POST",  
-        //     dataType: "json",  
-        //     contentType: "json",  
-        //     data: {'token': "aaaaaah"},
-        //     success: function(response){              
-        //         console.log(response);
-        //     },  
-        //     error: function(response){  
-        //         console.log(response);
-        //     }  
-        // }); //ajax close
         $.ajax({
             method: "POST",
             url: url_autenticacion,
@@ -55,11 +41,10 @@
             $("#super_nav_bar").append("<li><a href="+url_archivo+">Archivos</a></li>");
             $("#super_nav_bar").append("<li><a href="+url_nuevo+">Nuevo</a></li>");
             var el_nombre = "<a aria-expanded=\"false\" role=\"button\" data-toggle=\"dropdown\" class=\"dropdown-toggle\" href=\"#\">Aca va el Nombre... <span class=\"caret\"></span></a>";
-            var otro = "<div class=\"nav navbar-nav navbar-right\"> NOMBRE </div>";
-            var otro2 = "<ul class=\"nav navbar-nav navbar-right\"><li class=\"navbar-brand active\">"+profile.getName()+"</li></ul>";
+            var nombre_usuario = "<ul class=\"nav navbar-nav navbar-right\"><li class=\"navbar-brand active\">"+profile.getName()+"</li></ul>";
             console.log(msg);
 
-            $("#barra-collapse").append(otro2);
+            $("#barra-collapse").append(nombre_usuario);
             $(".g-signin2").html("<a href=\"<?php echo base_url(); ?>\" onclick=\"signOut();\">Sign out</a>")
 
         });

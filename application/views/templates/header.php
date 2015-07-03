@@ -45,6 +45,11 @@
 	        <li><a href="<?php echo base_url()?>Archivos/Agregar">Nuevo</a></li>
 	        <?php }?> <!-- isset($_SESION["user_token"]){ -->
 	      </ul>
+	      
+	      <ul class="nav navbar-nav navbar-right">
+	      	<li class="navbar-brand active" id="nombre_del_usuario"><?php echo $nombre_del_usuario ?></li>
+	      </ul>
+	      
 	    </div><!-- /.navbar-collapse -->
 	  </div><!-- /.container-fluid -->
 	</nav>

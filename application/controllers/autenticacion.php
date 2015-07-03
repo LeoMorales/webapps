@@ -58,8 +58,11 @@
 		        //Update shopping cart session data
 		        $this->nativesession->set( 'user_token', $token );
 		        $_SESSION['user_correo'] = $user['correo'];
+		        $_SESSION['user_nombre'] = $nombre;
 		        $firephp->log("SESSION:");
 		        $firephp->log($this->nativesession->get('user_token'));
+		        $firephp->log("GUARDAMOS NOMBRE:");
+		        $firephp->log($this->nativesession->get('user_nombre'));
 				// echo "<center><h4>Hola ".$nombre."! (".$email.") </h4></center>";
 				$this->load->view("autenticacion/bienvenido", $data);
 			}
