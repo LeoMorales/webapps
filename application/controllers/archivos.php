@@ -25,6 +25,9 @@
 					$this->load->helper('html');
 					$data['titulo'] = "Galería principal";
 					$data['imagenes'] = $this->galeria_model->recuperarImagenes();
+					if (isset($_SESSION['user_nombre'])){
+						$data['nombre_del_usuario'] = $_SESSION['user_nombre'];
+					}
 					$this->load->view("templates/header", $data);
 					$this->load->view("archivos/index", $data);
 					$this->load->view("templates/footer");
@@ -46,6 +49,7 @@
 					$this->load->helper('html');
 					$data['titulo'] = "Galería principal";
 					$data['imagenes'] = $this->galeria_model->recuperarImagenesPublicas();
+					$data['nombre_del_usuario'] = "";
 					$this->load->view("templates/header", $data);
 					$this->load->view("archivos/index", $data);
 					$this->load->view("templates/footer");
@@ -72,6 +76,9 @@
 				}
 			}
 			$data['titulo'] = "Nuevo archivo";
+			if (isset($_SESSION['user_nombre'])){
+				$data['nombre_del_usuario'] = $_SESSION['user_nombre'];
+			}
 			$this->load->view("templates/header", $data);
 			$this->load->view("archivos/agregar", $data);
 			$this->load->view("templates/footer");
@@ -94,6 +101,9 @@
 					redirect('Archivos/Propias');
 				$data['datosImagen'] = $resultado;
 				$data['titulo'] = "Modificación archivo";
+				if (isset($_SESSION['user_nombre'])){
+				$data['nombre_del_usuario'] = $_SESSION['user_nombre'];
+				}
 				$this->load->view("templates/header", $data);
 				$this->load->view("archivos/modificar", $data);
 				$this->load->view("templates/footer");
@@ -125,6 +135,9 @@
 					$imagenes = $this->galeria_model->recuperarImagenesPropias();
 					$imagenes = $this->get_cadena_tags($imagenes);
 					$data['imagenes'] = $imagenes;
+					if (isset($_SESSION['user_nombre'])){
+						$data['nombre_del_usuario'] = $_SESSION['user_nombre'];
+					}
 					$this->load->view("templates/header", $data);
 					$this->load->view("archivos/propias", $data);
 					$this->load->view("templates/footer");
