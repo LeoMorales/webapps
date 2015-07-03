@@ -144,7 +144,8 @@ class Galeria_model extends CI_model{
 		$tags = explode(" ", trim($_POST['tags']));
 		$imagenes = [];
 		foreach ($tags as $tag) {
-			$imagenes = array_merge($imagenes, $this->recuperarImagenTag($tag));
+			if ($tag != "")
+				$imagenes = array_merge($imagenes, $this->recuperarImagenTag($tag));
 		}
 		return $this->devolverImagenes($imagenes);
 	}
@@ -154,7 +155,8 @@ class Galeria_model extends CI_model{
 		$tags = explode(" ", trim($_POST['tags']));
 		$imagenes = [];
 		foreach ($tags as $tag) {
-			$imagenes = array_merge($imagenes, $this->recuperarImagenPublicaTag($tag));
+			if ($tag != "")
+				$imagenes = array_merge($imagenes, $this->recuperarImagenPublicaTag($tag));
 		}
 		return $this->devolverImagenes($imagenes);
 	}
@@ -163,9 +165,11 @@ class Galeria_model extends CI_model{
 		$criterio = explode(" ", trim($_POST['tags']));
 		$imagenes = [];
 		foreach ($criterio as $palabra) {
-			$imagenes = array_merge($imagenes, $this->recuperarImagenPropiaTag($palabra));
-			$imagenes = array_merge($imagenes, $this->recuperarImagenPropiaDescripcion($palabra));
-			$imagenes = array_merge($imagenes, $this->recuperarImagenPropiaNombre($palabra));
+			if ($palabra != ""){
+				$imagenes = array_merge($imagenes, $this->recuperarImagenPropiaTag($palabra));
+				$imagenes = array_merge($imagenes, $this->recuperarImagenPropiaDescripcion($palabra));
+				$imagenes = array_merge($imagenes, $this->recuperarImagenPropiaNombre($palabra));
+			}
 		}
 		return $this->devolverImagenes($imagenes);
 	}
