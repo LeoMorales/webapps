@@ -19,10 +19,11 @@
 						$data['result'] = $this->galeria_model->filtrarImagenes();
 					}	
 					echo json_encode($data);
+				}elseif ($this->input->post('ajax')){
 				}else{
 					$this->load->model('galeria_model');
 					$this->load->helper('html');
-					$data['titulo'] = "Pagina principal";
+					$data['titulo'] = "Galería principal";
 					$data['imagenes'] = $this->galeria_model->recuperarImagenes();
 					$this->load->view("templates/header", $data);
 					$this->load->view("archivos/index", $data);
@@ -43,7 +44,7 @@
 				}else{
 					$this->load->model('galeria_model');
 					$this->load->helper('html');
-					$data['titulo'] = "Pagina principal";
+					$data['titulo'] = "Galería principal";
 					$data['imagenes'] = $this->galeria_model->recuperarImagenesPublicas();
 					$this->load->view("templates/header", $data);
 					$this->load->view("archivos/index", $data);
@@ -76,6 +77,29 @@
 			$this->load->view("templates/footer");
 		}
 
+		public function Modificar(){
+			session_start();
+			if (!isset($_SESSION['user_correo']))
+				redirect('Archivos');
+			if($this->input->post()){
+				require 'FirePHPCore/fb.php';
+				$this->load->model('archivo_model');
+				$data['respuesta'] = $this->archivo_model->modificarImagen();
+				//FB::log($data);
+				redirect('Archivos/Propias');
+			}else{
+				$this->load->model('archivo_model');
+				$resultado = $this->archivo_model->recuperarImagen($_GET['imagen']);
+				if ($resultado == null)
+					redirect('Archivos/Propias');
+				$data['datosImagen'] = $resultado;
+				$data['titulo'] = "Modificación archivo";
+				$this->load->view("templates/header", $data);
+				$this->load->view("archivos/modificar", $data);
+				$this->load->view("templates/footer");
+			}
+		}
+
 		public function Propias(){
 			session_start();
 			if (!isset($_SESSION['user_correo'])){
@@ -89,14 +113,18 @@
 			        	$data['result'] = [];
 			        }else{
 			        	$this->load->model('galeria_model');
-						$data['result'] = $this->galeria_model->filtrarImagenesPropias();
+			        	$imagenes = $this->galeria_model->filtrarImagenesPropias();
+						$imagenes = $this->get_cadena_tags($imagenes);
+						$data['result'] = $imagenes;
 					}	
 					echo json_encode($data);
 				}else{
 					$this->load->model('galeria_model');
 					$this->load->helper('html');
-					$data['titulo'] = "Pagina principal";
-					$data['imagenes'] = $this->galeria_model->recuperarImagenesPropias();
+					$data['titulo'] = "Galería personal";
+					$imagenes = $this->galeria_model->recuperarImagenesPropias();
+					$imagenes = $this->get_cadena_tags($imagenes);
+					$data['imagenes'] = $imagenes;
 					$this->load->view("templates/header", $data);
 					$this->load->view("archivos/propias", $data);
 					$this->load->view("templates/footer");
@@ -108,11 +136,25 @@
 			session_start();
 			if (isset($_SESSION['user_correo'])){
 				$this->load->model('archivo_model');
-				echo $this->archivo_model->eliminarImagen();
+				$this->archivo_model->eliminarImagen();
+				//require 'FirePHPCore/fb.php';
+				//FB::log($result);
 			}
 		}
 
-		// Funciones de validacion
+		// Funciones utiles
+
+		function get_cadena_tags($imagenes){
+			foreach ($imagenes as $id_imagen => $imagen) {
+				$tags_de_la_imagen = $this->galeria_model->recuperarTagsDeImagen($imagen["id"]);
+				$string_de_tags = '';
+				foreach ($tags_de_la_imagen as $key => $tag) {
+					$string_de_tags = $string_de_tags.' '.$tag['nombre'];
+				}
+				$imagenes[$id_imagen]["tags"] = $string_de_tags;
+			}
+			return $imagenes;
+		}
 
 		function imagen(){
 			if ($_FILES['imagen']['error'] > 0)

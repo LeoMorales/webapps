@@ -1,33 +1,41 @@
 <link href="<?= base_url('static/css/micss.css');?>" rel="stylesheet">
 <script src="<?= base_url('static/js/ajaxgaleria.js');?>"></script>
+<script src="<?= base_url('static/js/modaljs.js');?>"></script>
+<script src="<?= base_url('static/js/mijs.js');?>"></script>
 
 <center>
-	<h1> Pagina Principal </h1>
+	<h1> Galería Personal </h1>
 	<br><br>
-	<form id="form-propias">
-		<div class="input-group">
-	      <span class="input-group-btn">
-	        <button class="btn btn-default" type="submit">Buscar</button>
-	      </span>
-	      <input id="buscar" type="text" name="tags" class="form-control" placeholder="verano vacaciones familia">
-	    </div>
-	</form>
-    <br><br>
-	<div id="divthumbnails" class="row">
-		<center>
-		<?php
-		$i = 0;
-		foreach ($imagenes as $imagen){$i++;?>
-			<div id="<?=$i?>" class="col-md-3">
-				<div class="thumbnail">
-					<a href="#">
-					<?= img($imagen['thumbnail']); ?>
-					</a>
-					<button type="button" class="btn btn-default glyphicon glyphicon-remove-circle"
-					onclick="removeImagen('<?=$imagen["thumbnail"]?>',<?=$i?>)"></button>
-				</div>
+	<input id="buscar" data-url="Archivos/Propias/" template="propias" type="text" name="tags" class="form-control" placeholder="verano vacaciones familia">
+	<br>
+	<label>Nombre</label>
+	<button class="btn-primary glyphicon glyphicon-arrow-up" onclick="ordenarArriba('data-nombre')"></button>
+	<button class="btn-primary glyphicon glyphicon-arrow-down" onclick="ordenarAbajo('data-nombre')"></button>
+	<label>Descripción</label>
+	<button class="btn-primary glyphicon glyphicon-arrow-up" onclick="ordenarArriba('data-descripcion')"></button>
+	<button class="btn-primary glyphicon glyphicon-arrow-down" onclick="ordenarAbajo('data-descripcion')"></button>
+	<label>Fecha</label>
+	<button class="btn-primary glyphicon glyphicon-arrow-up" onclick="ordenarArriba('data-fecha')"></button>
+	<button class="btn-primary glyphicon glyphicon-arrow-down" onclick="ordenarAbajo('data-fecha')"></button>
+	<br><br>
+	<div id="contenido">	
+	<?php foreach ($imagenes as $imagen){?>
+		<div class="miDiv row" data-nombre="<?=$imagen['nombre']?>" data-descripcion="<?=$imagen['descripcion']?>"
+		data-fecha="<?=$imagen['fecha']?>" id="<?=$imagen['id']?>">
+			<div class="mi-imagen col-md-4">
+			<?=img($imagen['thumbnail']);?> 
 			</div>
-		<?php } ?>
-		</center>	
-	</div>	
+			<div class="mi-datos-imagen col-md-8">
+				<label>Nombre: <?=$imagen['nombre']?></label><br>
+				<label>Descripción: <?= $imagen['descripcion']?></label><br>
+				<label>Tags: <?= $imagen['tags']?></label><br>
+				<label>Fecha: <?= $imagen['fecha']?></label><br>
+				<label>Publico: <?php echo ($imagen['publico'] == 1) ? 'Si' : 'No'; ?></label><br>
+				<a href="modificar?imagen=<?=$imagen['id']?>" class="btn btn-primary">Modificar</a>
+				<button type="button" class="btn btn-primary"
+				onclick="removeImagen('<?=$imagen["id"]?>')">Eliminar</button>
+			</div>
+		</div>
+	<?php } ?>
+	</div>
 </center>

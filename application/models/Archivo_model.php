@@ -12,7 +12,7 @@ class Archivo_model extends CI_Model{
 		$this->load->database();
 	}
 
-	private function random_nombre($nombre, $length) {
+	private function random_file($nombre, $length) {
 	    $key = '';
 	    $keys = array_merge(range(0, 9), range('a', 'z'));
 
@@ -22,9 +22,10 @@ class Archivo_model extends CI_Model{
     	return $key."-".$nombre;
 	}
 
-	private function nombreExiste($nombre){
+	public function archivoExiste($archivo){
 		$this->db->select('*');
-		$this->db->where('nombre',$nombre);
+		$imagen = "imageStorage/".$archivo;
+		$this->db->where('archivo',$imagen);
 		$g = $this->db->get('imagen');
 		if ($g->num_rows() > 0)
 			return $g->result()[0]->id;
@@ -76,9 +77,14 @@ class Archivo_model extends CI_Model{
 	}
 
 	public function insertarImagen(){
+		$extension = image_type_to_extension(exif_imagetype($_FILES['imagen']['tmp_name']));
+		if ($extension == ".jpeg")
+			$extension = ".jpg";
     	do {
-			$this->nombre = $this->random_nombre($_POST['nombre'], 7);
-    	} while ($this->nombreExiste($this->nombre) != 0);
+    		$nombre_random = $this->random_file($_POST['nombre'], 7);
+			$this->archivo = "imageStorage/".$nombre_random.$extension;
+    	} while (file_exists($this->archivo));
+    	$this->nombre = $_POST['nombre'];
 		$this->descripcion = $_POST['desc'] ;
 		$this->publico = 0;
 		if (isset($_POST['public']))
@@ -90,16 +96,13 @@ class Archivo_model extends CI_Model{
 		}
 		
 		//creacion de la imagen
-		$extension = image_type_to_extension(exif_imagetype($_FILES['imagen']['tmp_name']));
-		if ($extension == ".jpeg")
-			$extension = ".jpg";
-		$this->archivo = "imageStorage/".$this->nombre.$extension;
 		$origen = $_FILES['imagen']['tmp_name']; 
-		$destino =  realpath(".")."\\imageStorage\\".$this->nombre.$extension;
-		if (copy($origen,$destino)) {
-            $status = "<div class='alert alert-success' role='alert'>El archivo fue cargado con exito</div>";
-        } else {
+		$destino =  realpath(".")."\\".$this->archivo;
+		if (move_uploaded_file($origen,$destino))
+        	$status = "<div class='alert alert-success' role='alert'>El archivo fue cargado con exito</div>";
+        else{
             $status = "<div class='alert alert-danger' role='alert'>Error al subir archivo</div>";
+            return $status;
         }
     	
     	//creacion del thumbnail
@@ -107,23 +110,23 @@ class Archivo_model extends CI_Model{
     	$CI->load->library('image_lib');
     	$config['image_library'] = 'gd2';
 		$config['source_image'] = $destino;
-		$config['new_image'] = realpath(".")."\\imageThumbnails\\".$this->nombre.$extension;
+		$config['new_image'] = realpath(".")."\\imageThumbnails\\".$nombre_random.$extension;
 		$config['maintain_ratio'] = TRUE;
 		$config['create_thumb'] = TRUE;
 		$config['height'] = 150;
 		$CI->image_lib->initialize($config);
         $CI->image_lib->resize();
         $CI->image_lib->clear();
-        $this->thumbnail = "imageThumbnails/".$this->nombre."_thumb".$extension;
+        $this->thumbnail = "imageThumbnails/".$nombre_random."_thumb".$extension;
     	
    		//recorte de la imagen para dejar todos los thumbnails iguales
-		$original_size = getimagesize(realpath(".")."\\imageThumbnails\\".$this->nombre."_thumb".$extension);
+		$original_size = getimagesize(realpath(".")."\\imageThumbnails\\".$nombre_random."_thumb".$extension);
 		$desplazamiento = 150;
 		if ($original_size[0] > 150)
 			$desplazamiento = ($original_size[0] -150) / 2;
-		$config['source_image'] = realpath(".")."\\imageThumbnails\\".$this->nombre."_thumb".$extension;
+		$config['source_image'] = realpath(".")."\\imageThumbnails\\".$nombre_random."_thumb".$extension;
 		$config['maintain_ratio'] = FALSE;
-		$config['new_image'] = realpath(".")."\\imageThumbnails\\".$this->nombre.$extension;
+		$config['new_image'] = realpath(".")."\\imageThumbnails\\".$nombre_random.$extension;
 		$config['width'] = 150;
 		$config['height'] = 150;
 		$config['x_axis'] = $desplazamiento;
@@ -132,19 +135,16 @@ class Archivo_model extends CI_Model{
 		$CI->image_lib->clear();
 
     	$this->db->insert('imagen',$this);
-    	$this->insertarTags($this->nombreExiste($this->nombre));
+    	$this->insertarTags($this->archivoExiste($nombre_random.$extension));
     	return $status;
 	}
 
-	public function buscarThumbnail($correo, $thumb){
+	public function buscarThumbnail($correo, $id){
 		$this->db->select('*');
-		$this->db->where('thumbnail', $thumb);
+		$this->db->where('id', $id);
 		$this->db->where('propietario', $correo);
 		$g = $this->db->get('imagen');
-		if ($g->num_rows() > 0)
-			return $g->result()[0]->id;
-		else
-			return 0;		
+		return $g;
 	}
 
 	public function decrementarReferencias($imagen){
@@ -153,9 +153,9 @@ class Archivo_model extends CI_Model{
 		$this->db->join("tag_imagen ti", "tag.id = ti.id_tag");
 		$this->db->where('id_imagen',$imagen);
 		$g = $this->db->get();
-		if ($g->num_rows() > 0){
-			$ref = $g->result()[0]->referencias;
-			$tag = $g->result()[0]->id_tag;
+		foreach ($g->result() as $row){
+			$ref = $row->referencias;
+			$tag = $row->id_tag;
 			if ($ref > 0){
 				$data['referencias'] = $ref - 1;
                	$this->db->where('id', $tag);
@@ -165,15 +165,35 @@ class Archivo_model extends CI_Model{
 	}
 
 	public function eliminarImagen(){
-		$id = $this->buscarThumbnail($_SESSION['user_correo'], $_POST['path']);
-		if ($id >0){
-			$this->decrementarReferencias($id);
-			$this->db->where('id_imagen', $id);
+		$existe = $this->buscarThumbnail($_SESSION['user_correo'], $_POST['id']);
+		if ($existe->num_rows() > 0){
+			unlink($existe->result()[0]->archivo);
+			unlink($existe->result()[0]->thumbnail);
+			$this->decrementarReferencias($_POST['id']);
+			$this->db->where('id_imagen', $_POST['id']);
 			$this->db->delete('tag_imagen');
-			$this->db->where('id', $id);
+			$this->db->where('id', $_POST['id']);
 			$this->db->delete('imagen');
 		}
-		return $id;
+		return;
+	}
+
+	public function recuperarImagen($id){
+		$this->db->select("*");
+		$this->db->where("id", $id);
+		$result = $this->db->get("imagen");
+		if ($result->num_rows() > 0)
+			return $result->result()[0];
+		else
+			return null;
+	}
+
+	public function modificarImagen(){
+		$data['nombre'] = $_POST['nombre'];
+		$data['descripcion'] = $_POST['desc'];
+		$data['publico'] = isset($_POST['public'])?1:0;
+		$this->db->where("id", $_GET['imagen']);
+		$this->db->update('imagen', $data); 
 	}
 }
 ?>
