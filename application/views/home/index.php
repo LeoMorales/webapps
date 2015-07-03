@@ -42,9 +42,12 @@
             $("#super_nav_bar").append("<li><a href="+url_nuevo+">Nuevo</a></li>");
             var el_nombre = "<a aria-expanded=\"false\" role=\"button\" data-toggle=\"dropdown\" class=\"dropdown-toggle\" href=\"#\">Aca va el Nombre... <span class=\"caret\"></span></a>";
             var nombre_usuario = "<ul class=\"nav navbar-nav navbar-right\"><li class=\"navbar-brand active\">"+profile.getName()+"</li></ul>";
+            var nombre_usuario = "<li>"+profile.getName()+"</li>";
+            
             console.log(msg);
 
-            $("#barra-collapse").append(nombre_usuario);
+            //$("#barra-collapse").append(nombre_usuario);
+            $("#nombre_del_usuario").html(nombre_usuario);
             $(".g-signin2").html("<a href=\"<?php echo base_url(); ?>\" onclick=\"signOut();\">Sign out</a>")
 
         });

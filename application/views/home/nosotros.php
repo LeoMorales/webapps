@@ -1,16 +1,16 @@
 <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>static/css/styles_nosotros.css"> 
 <header id="header-nosotros" class="sb-page-header">
     <div class="container">
-        <h1>Sobre nosotros</h1>
+        <h1 class="titulo">Sobre nosotros</h1>
         <br>
-        <h2>Autores</h2>
+        <h2 class="titulo">Autores</h2>
         <p>Dominguez Emmanuel</p>
         <p>Morales Leonardo</p>
-        <h2>Catedra:</h2>
+        <h2 class="titulo">Catedra:</h2>
         <p>Aplicaciones Web</p>
-        <h2>Profesor Adjunto:</h2>
+        <h2 class="titulo">Profesor Adjunto:</h2>
         <p>Dr. Diego Martinez</p>
-        <h2>Auxiliares:</h2>
+        <h2 class="titulo">Auxiliares:</h2>
         <p>Lic. Gabriel Ingravallo</p>
         <p>Lic. Diego Van Haster</p>
     

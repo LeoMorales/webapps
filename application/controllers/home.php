@@ -20,7 +20,7 @@
 				$data['nombre_del_usuario'] = $_SESSION['user_nombre'];
 			}
 			else{
-				$data['nombre_del_usuario'] = "---";
+				$data['nombre_del_usuario'] = "";
 			}
 			$this->load->view("templates/header", $data);
 			$this->load->view("home/index");

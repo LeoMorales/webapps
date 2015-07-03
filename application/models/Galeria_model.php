@@ -9,7 +9,7 @@ class Galeria_model extends CI_model{
 	public function recuperarImagenes(){
 		$this->db->select('id, nombre, archivo, thumbnail');
 		$this->db->where('propietario !=', $_SESSION['user_correo']);
-		$this->db->limit(12);	
+		//$this->db->limit(12);	
 		$g = $this->db->get('imagen');
 		return $g->result_array();
 	}
@@ -17,7 +17,7 @@ class Galeria_model extends CI_model{
 	public function recuperarImagenesPublicas(){
 		$this->db->select('id, nombre, archivo, thumbnail');
 		$this->db->where('publico', 1);
-		$this->db->limit(12);
+		//$this->db->limit(12);
 		$g = $this->db->get('imagen');
 		return $g->result_array();
 	}
@@ -25,7 +25,7 @@ class Galeria_model extends CI_model{
 	public function recuperarImagenesPropias(){
 		$this->db->select('id, nombre, descripcion, publico, thumbnail, fecha');
 		$this->db->where('propietario', $_SESSION['user_correo']);
-		$this->db->limit(12);
+		//$this->db->limit(12);
 		$g = $this->db->get('imagen');
 		return $g->result_array();
 	}
