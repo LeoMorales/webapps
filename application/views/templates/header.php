@@ -20,6 +20,7 @@
 	</title>
     <!-- Bootstrap -->	
 	<link href="<?php echo base_url('assets/css/bootstrap.min.css'); ?>" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>static/css/styles_header.css"> 
 </head>
 <body>
 	<nav class="navbar navbar-inverse">
@@ -47,6 +48,7 @@
 	      </ul>
 	      
 	      <ul class="nav navbar-nav navbar-right">
+	      	<li id="btn_nosotros" class=""><a href="<?php echo base_url()?>Home/Nosotros">Nosotros</a></li>
 	      	<li class="navbar-brand active" id="nombre_del_usuario"><?php echo $nombre_del_usuario ?></li>
 	      </ul>
 	      
